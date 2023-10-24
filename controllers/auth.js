@@ -59,7 +59,10 @@ exports.login = (req, res, next) => {
         throw error;
       }
       const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString() }, "somesupersecretsecret", { expiresIn: "1h" });
-      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+      const userToSend = loadedUser;
+      userToSend.password = undefined;
+
+      res.status(200).json({ token: token, user: userToSend });
     })
     .catch((err) => {
       if (!err.statusCode) {
