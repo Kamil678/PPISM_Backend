@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const testRoutes = require("./routes/test");
+const projectRoutes = require("./routes/project");
 const authRoutes = require("./routes/auth");
 
 const app = express();
@@ -16,8 +17,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api", testRoutes);
+app.use("/api", projectRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
