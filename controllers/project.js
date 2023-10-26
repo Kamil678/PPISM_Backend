@@ -99,6 +99,56 @@ exports.getProject = (req, res, next) => {
     });
 };
 
+exports.updateProject = (req, res, next) => {
+  const projectId = req.params.projectId;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed, entered data is incorrect.");
+    error.statusCode = 422;
+    throw error;
+  }
+  const title = req.body.title;
+  const description = req.body.description;
+  //let imageUrl = req.body.image;
+  // if (req.file) {
+  //   imageUrl = req.file.path;
+  // }
+  // if (!imageUrl) {
+  //   const error = new Error('No file picked.');
+  //   error.statusCode = 422;
+  //   throw error;
+  // }
+  Project.findById(projectId)
+    .then((project) => {
+      if (!project) {
+        const error = new Error("Could not find project.");
+        error.statusCode = 404;
+        throw error;
+      }
+      if (project.owner.toString() !== req.userId) {
+        const error = new Error("Not authorized!");
+        error.statusCode = 403;
+        throw error;
+      }
+      // if (imageUrl !== post.imageUrl) {
+      //   clearImage(post.imageUrl);
+      // }
+      project.title = title;
+      //post.imageUrl = imageUrl;
+      project.description = content;
+      return project.save();
+    })
+    .then((result) => {
+      res.status(200).json({ message: "Project updated!", project: result });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 exports.deleteProject = (req, res, next) => {
   const projectId = req.params.projectId;
   Project.findById(projectId)
