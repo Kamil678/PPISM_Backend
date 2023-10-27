@@ -11,6 +11,10 @@ router.post("/project", isAuth, [body("title").trim().isLength({ min: 5 }), body
 
 router.get("/project/:projectId", isAuth, projectController.getProject);
 
+router.put("/project/:projectId", isAuth, [body("title").trim().isLength({ min: 5 }), body("description").trim().isLength({ min: 5 })], projectController.updateProject);
+
+router.put("/project/status/:projectId", isAuth, projectController.updateProjectStatus);
+
 router.delete("/project/:projectId", isAuth, projectController.deleteProject);
 
 module.exports = router;

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "NODE_ENV=production node MONGO_USER=kamilpigulak MONGO_PASSWORD=tDLmnLBTsMA4syqz MONGO_DEFAULT_DATABASE=ppism app.js",
+    "start-server": "node app.js",
+    "start-dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,8 +16,10 @@
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.6.3"
+    "mongoose": "^7.6.3",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

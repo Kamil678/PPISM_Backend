@@ -12,9 +12,9 @@ exports.getProjects = (req, res, next) => {
   // let totalItems;
   Project.find()
     //.countDocuments()
-    .then((count) => {
+    .then((projects) => {
       // totalItems = count;
-      return Project.find();
+      return Project.find({ owner: req.userId });
       // .skip((currentPage - 1) * perPage)
       // .limit(perPage);
     })
@@ -22,7 +22,7 @@ exports.getProjects = (req, res, next) => {
       res.status(200).json({
         message: "Fetched projects successfully.",
         projects: projects,
-        totalItems: totalItems,
+        // totalItems: totalItems,
       });
     })
     .catch((err) => {
@@ -82,9 +82,9 @@ exports.createProject = (req, res, next) => {
 
 exports.getProject = (req, res, next) => {
   const projectId = req.params.projectId;
-  Post.findById(projectId)
+  Project.findById(projectId)
     .then((project) => {
-      if (!post) {
+      if (!project) {
         const error = new Error("Could not find project.");
         error.statusCode = 404;
         throw error;
@@ -135,11 +135,42 @@ exports.updateProject = (req, res, next) => {
       // }
       project.title = title;
       //post.imageUrl = imageUrl;
-      project.description = content;
+      project.description = description;
       return project.save();
     })
     .then((result) => {
       res.status(200).json({ message: "Project updated!", project: result });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.updateProjectStatus = (req, res, next) => {
+  const projectId = req.params.projectId;
+  const status = req.body;
+
+  Project.findById(projectId)
+    .then((project) => {
+      if (!project) {
+        const error = new Error("Could not find project.");
+        error.statusCode = 404;
+        throw error;
+      }
+      if (project.owner.toString() !== req.userId) {
+        const error = new Error("Not authorized!");
+        error.statusCode = 403;
+        throw error;
+      }
+
+      project.status = status;
+      return project.save();
+    })
+    .then((result) => {
+      res.status(200).json({ message: "Status project updated!", project: result });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -159,6 +190,7 @@ exports.deleteProject = (req, res, next) => {
         throw error;
       }
       if (project.owner.toString() !== req.userId) {
+        console.log(project.owner.toString(), req.userId);
         const error = new Error("Not authorized!");
         error.statusCode = 403;
         throw error;

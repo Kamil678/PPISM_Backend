@@ -1,0 +1,7 @@
+{
+  "env": {
+    "MONGO_USER": "kamilpigulak",
+    "MONGO_PASSWORD": "tDLmnLBTsMA4syqz",
+    "MONGO_DEFAULT_DATABASE": "ppism"
+  }
+}
