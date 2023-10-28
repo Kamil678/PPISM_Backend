@@ -14,6 +14,7 @@ exports.signup = (req, res, next) => {
   }
   const name = req.body.name;
   const surname = req.body.surname;
+  const role = req.body.role;
   const email = req.body.email;
   const password = req.body.password;
   bcrypt
@@ -22,6 +23,7 @@ exports.signup = (req, res, next) => {
       const user = new User({
         name: name,
         surname: surname,
+        role: role,
         email: email,
         password: hashedPw,
       });
