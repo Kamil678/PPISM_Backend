@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const {ObjectId} = require("mongoose");
+const { ObjectId } = require("mongoose");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
-const Project = require('../models/project')
+const Project = require("../models/project");
 
 exports.getUser = (req, res, next) => {
   const userId = req.params.userId;
@@ -83,20 +83,16 @@ exports.deleteUser = (req, res, next) => {
         error.statusCode = 403;
         throw error;
       }
-      userObjectId = user._id
-      //return User.findByIdAndRemove(userId);
+      userObjectId = user._id;
+      return User.findByIdAndRemove(userId);
     })
     .then((result) => {
-      console.log(userObjectId)
-      return User.deleteMany({owner: userObjectId });
+      console.log(userObjectId);
+      return Project.deleteMany({ owner: userObjectId });
     })
-    // .then((user) => {
-    //   user.projects.pull(projectId);
-    //   return user.save();
-    // })
     .then((result) => {
-      console.log(result)
-      res.status(200).json({ message: "Deleted project." });
+      console.log(result);
+      res.status(200).json({ message: "Deleted projects." });
     })
     .catch((err) => {
       if (!err.statusCode) {
