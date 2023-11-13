@@ -12,6 +12,14 @@ const projectSchema = new Schema(
       type: String,
       required: true,
     },
+    productName: {
+      type: String,
+      required: true,
+    },
+    parts: {
+      type: Array,
+      required: true,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",

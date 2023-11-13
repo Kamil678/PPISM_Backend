@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/projects", isAuth, projectController.getProjects);
 
-router.post("/project", isAuth, [body("title").trim().isLength({ min: 5 }), body("description").trim().isLength({ min: 5 })], projectController.createProject);
+router.post("/project", isAuth, [body("title").trim().isLength({ min: 5 }), body("description").trim().isLength({ min: 5 }), body("productName").notEmpty()], projectController.createProject);
 
 router.get("/project/:projectId", isAuth, projectController.getProject);
 

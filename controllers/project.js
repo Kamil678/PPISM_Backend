@@ -48,10 +48,14 @@ exports.createProject = (req, res, next) => {
   //const imageUrl = req.file.path;
   const title = req.body.title;
   const description = req.body.description;
+  const productName = req.body.productName;
+  const parts = req.body.parts;
   let owner;
   const project = new Project({
     title: title,
     description: description,
+    productName: productName,
+    parts: parts,
     //imageUrl: imageUrl,
     owner: req.userId,
   });
@@ -109,6 +113,8 @@ exports.updateProject = (req, res, next) => {
   }
   const title = req.body.title;
   const description = req.body.description;
+  const productName = req.body.productName;
+  const parts = req.body.parts;
   //let imageUrl = req.body.image;
   // if (req.file) {
   //   imageUrl = req.file.path;
@@ -136,6 +142,8 @@ exports.updateProject = (req, res, next) => {
       project.title = title;
       //post.imageUrl = imageUrl;
       project.description = description;
+      project.productName = productName;
+      project.parts = parts;
       return project.save();
     })
     .then((result) => {
