@@ -25,6 +25,11 @@ const projectSchema = new Schema(
       ref: "User",
       required: true,
     },
+    assemblyStructure: {
+      type: Schema.Types.ObjectId,
+      ref: "AssemblyStructure",
+      required: false,
+    },
     status: {
       type: Object,
       default: { id: 1, name: "NEW" },

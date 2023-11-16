@@ -30,6 +30,12 @@ const userSchema = new Schema(
         ref: "Project",
       },
     ],
+    assemblyStructures: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "AssemblyStructure",
+      },
+    ],
   },
   {
     timestamps: {},
