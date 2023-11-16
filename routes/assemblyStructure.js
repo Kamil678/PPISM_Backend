@@ -9,7 +9,7 @@ router.get("/assembly-structure", isAuth, assemblyStructureController.getAssembl
 
 router.post("/assembly-structure", isAuth, assemblyStructureController.createAssemblyStructure);
 
-router.get("/assembly-structure/:assemblyStructureId", isAuth);
+router.get("/assembly-structure/:assemblyStructureId", isAuth, assemblyStructureController.getAssemblyStructure);
 
 router.put("/assembly-structure/:assemblyStructureId", isAuth);
 

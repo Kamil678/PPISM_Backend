@@ -81,24 +81,24 @@ exports.createAssemblyStructure = (req, res, next) => {
     });
 };
 
-// exports.getProject = (req, res, next) => {
-//   const projectId = req.params.projectId;
-//   Project.findById(projectId)
-//     .then((project) => {
-//       if (!project) {
-//         const error = new Error("Could not find project.");
-//         error.statusCode = 404;
-//         throw error;
-//       }
-//       res.status(200).json({ message: "Project fetched.", project: project });
-//     })
-//     .catch((err) => {
-//       if (!err.statusCode) {
-//         err.statusCode = 500;
-//       }
-//       next(err);
-//     });
-// };
+exports.getAssemblyStructure = (req, res, next) => {
+  const assemblyStructureId = req.params.assemblyStructureId;
+  AssemblyStructure.findById(assemblyStructureId)
+    .then((assemblyStructure) => {
+      if (!assemblyStructure) {
+        const error = new Error("Could not find assembly structure.");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: "Assembly structure fetched.", assemblyStructure: assemblyStructure });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
 
 // exports.updateProject = (req, res, next) => {
 //   const projectId = req.params.projectId;
