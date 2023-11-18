@@ -7,69 +7,67 @@ const { validationResult } = require("express-validator");
 const Project = require("../models/project");
 const User = require("../models/user");
 const AssemblyStructure = require("../models/assemblyStructure");
-const project = require("../models/project");
-const assemblyStructure = require("../models/assemblyStructure");
+const GraphicAssemblyPlan = require("../models/graphicAssemblyPlan");
 
-exports.getAssemblyStructures = (req, res, next) => {
-  AssemblyStructure.find()
-    //.countDocuments()
-    .then((assemblyStructure) => {
-      // totalItems = count;
-      return AssemblyStructure.find({ owner: req.userId });
-      // .skip((currentPage - 1) * perPage)
-      // .limit(perPage);
-    })
-    .then((assemblyStructures) => {
-      res.status(200).json({
-        message: "Fetched projects successfully.",
-        assemblyStructures: assemblyStructures,
-      });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
-};
+// exports.getAssemblyStructures = (req, res, next) => {
+//   AssemblyStructure.find()
+//     //.countDocuments()
+//     .then((assemblyStructure) => {
+//       // totalItems = count;
+//       return AssemblyStructure.find({ owner: req.userId });
+//       // .skip((currentPage - 1) * perPage)
+//       // .limit(perPage);
+//     })
+//     .then((assemblyStructures) => {
+//       res.status(200).json({
+//         message: "Fetched projects successfully.",
+//         assemblyStructures: assemblyStructures,
+//       });
+//     })
+//     .catch((err) => {
+//       if (!err.statusCode) {
+//         err.statusCode = 500;
+//       }
+//       next(err);
+//     });
+// };
 
-exports.createAssemblyStructure = (req, res, next) => {
+exports.createGraphicAssemblyPlan = (req, res, next) => {
   const teams = req.body.teams;
-  const JM1 = req.body.JM1;
-  const projectId = req.body.project;
+  const projectId = req.body.projectId;
+  const assemblyStructureId = req.body.assemblyStructureId;
   let owner;
   let wholeProject;
-  const assemblyStructure = new AssemblyStructure({
+
+  const graphicAssemblyPlan = new GraphicAssemblyPlan({
     teams: teams,
-    JM1: JM1,
-    project: projectId,
+    projectId: projectId,
+    assemblyStructureId: assemblyStructureId,
     owner: req.userId,
   });
-  assemblyStructure
+
+  graphicAssemblyPlan
     .save()
     .then((result) => {
       return Project.findById(projectId);
     })
     .then((project) => {
       wholeProject = project;
-      project.assemblyStructure = assemblyStructure;
+      project.graphicAssemblyPlan = graphicAssemblyPlan;
       return project.save();
-    })
-    .then((result) => {
-      return Project.findById(projectId);
     })
     .then((result) => {
       return User.findById(req.userId);
     })
     .then((user) => {
       owner = user;
-      user.assemblyStructures.push(assemblyStructure);
+      user.graphicAssemblyPlans.push(graphicAssemblyPlan);
       return user.save();
     })
     .then((result) => {
       res.status(201).json({
-        message: "Project created successfully!",
-        assemblyStructure: assemblyStructure,
+        message: "Graphic assembly plan created successfully!",
+        graphicAssemblyPlan: graphicAssemblyPlan,
         project: wholeProject,
       });
     })
@@ -135,42 +133,40 @@ exports.updateAssemblyStructure = (req, res, next) => {
     });
 };
 
-exports.deleteAssemblyStructure = (req, res, next) => {
-  const assemblyStructureId = req.params.assemblyStructureId;
-  let assemblyStructureGlobal;
-  AssemblyStructure.findById(assemblyStructureId)
-    .then((assemblyStructure) => {
-      if (!assemblyStructure) {
-        const error = new Error("Could not find assembly structure.");
+exports.deleteGraphicAssemblyPlan = (req, res, next) => {
+  const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
+  let graphicAssemblyPlanGlobal;
+  GraphicAssemblyPlan.findById(graphicAssemblyPlanId)
+    .then((graphicAssemblyPlan) => {
+      if (!graphicAssemblyPlan) {
+        const error = new Error("Could not find graphic assembly plan.");
         error.statusCode = 404;
         throw error;
       }
-      if (assemblyStructure.owner.toString() !== req.userId) {
+      if (graphicAssemblyPlan.owner.toString() !== req.userId) {
         const error = new Error("Not authorized!");
         error.statusCode = 403;
         throw error;
       }
-      assemblyStructureGlobal = assemblyStructure;
-      return AssemblyStructure.findByIdAndRemove(assemblyStructureId);
+      graphicAssemblyPlanGlobal = graphicAssemblyPlan;
+      return GraphicAssemblyPlan.findByIdAndRemove(graphicAssemblyPlanId);
     })
     .then((result) => {
       return User.findById(req.userId);
     })
     .then((user) => {
-      user.assemblyStructures.pull(assemblyStructureId);
+      user.graphicAssemblyPlans.pull(graphicAssemblyPlanId);
       return user.save();
     })
     .then((result) => {
-      return Project.findById(assemblyStructureGlobal.project);
+      return Project.findById(graphicAssemblyPlanGlobal.project);
     })
     .then((project) => {
-      console.log(project);
-      project.assemblyStructure = undefined;
-      console.log(project.assemblyStructure);
+      project.graphicAssemblyPlan = undefined;
       return project.save();
     })
     .then((result) => {
-      res.status(200).json({ message: "Deleted assembly structure." });
+      res.status(200).json({ message: "Deleted graphic assembly plan." });
     })
     .catch((err) => {
       if (!err.statusCode) {

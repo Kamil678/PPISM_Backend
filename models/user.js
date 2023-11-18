@@ -36,6 +36,12 @@ const userSchema = new Schema(
         ref: "AssemblyStructure",
       },
     ],
+    graphicAssemblyPlans: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "GraphicAssemblyPlan",
+      },
+    ],
   },
   {
     timestamps: {},

@@ -11,7 +11,7 @@ router.post("/assembly-structure", isAuth, assemblyStructureController.createAss
 
 router.get("/assembly-structure/:assemblyStructureId", isAuth, assemblyStructureController.getAssemblyStructure);
 
-router.put("/assembly-structure/:assemblyStructureId", isAuth);
+router.put("/assembly-structure/:assemblyStructureId", isAuth, assemblyStructureController.updateAssemblyStructure);
 
 router.delete("/assembly-structure/:assemblyStructureId", isAuth, assemblyStructureController.deleteAssemblyStructure);
 
