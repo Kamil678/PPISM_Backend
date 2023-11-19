@@ -119,6 +119,7 @@ exports.updateAssemblyStructure = (req, res, next) => {
         throw error;
       }
 
+      console.log(assemblyStructure);
       assemblyStructure.teams = teams;
       assemblyStructure.JM1 = JM1;
 
