@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post("/graphic-assembly-plan", isAuth, graphicAssemblyPlanController.createGraphicAssemblyPlan);
 
-router.get("/graphic-assembly-plan/:graphicAssemblyPlanId", isAuth);
+router.get("/graphic-assembly-plan/:graphicAssemblyPlanId", isAuth, graphicAssemblyPlanController.getGraphicAssemblyPlan);
 
-router.put("/graphic-assembly-plan/:graphicAssemblyPlanId", isAuth);
+router.put("/graphic-assembly-plan/:graphicAssemblyPlanId", isAuth, graphicAssemblyPlanController.updateGraphicAssemblyPlan);
 
 router.delete("/graphic-assembly-plan/:graphicAssemblyPlanId", isAuth, graphicAssemblyPlanController.deleteGraphicAssemblyPlan);
 

@@ -79,16 +79,16 @@ exports.createGraphicAssemblyPlan = (req, res, next) => {
     });
 };
 
-exports.getAssemblyStructure = (req, res, next) => {
-  const assemblyStructureId = req.params.assemblyStructureId;
-  AssemblyStructure.findById(assemblyStructureId)
-    .then((assemblyStructure) => {
-      if (!assemblyStructure) {
-        const error = new Error("Could not find assembly structure.");
+exports.getGraphicAssemblyPlan = (req, res, next) => {
+  const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
+  GraphicAssemblyPlan.findById(graphicAssemblyPlanId)
+    .then((graphicAssemblyPlan) => {
+      if (!graphicAssemblyPlan) {
+        const error = new Error("Could not find graphic assembly plan.");
         error.statusCode = 404;
         throw error;
       }
-      res.status(200).json({ message: "Assembly structure fetched.", assemblyStructure: assemblyStructure });
+      res.status(200).json({ message: "Graphic assembly plan fetched.", graphicAssemblyPlan: graphicAssemblyPlan });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -98,32 +98,34 @@ exports.getAssemblyStructure = (req, res, next) => {
     });
 };
 
-exports.updateAssemblyStructure = (req, res, next) => {
-  const assemblyStructureId = req.params.assemblyStructureId;
+exports.updateGraphicAssemblyPlan = (req, res, next) => {
+  const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
 
   const teams = req.body.teams;
-  const JM1 = req.body.JM1;
+  const projectId = req.body.projectId;
+  const assemblyStructureId = req.body.assemblyStructureId;
 
-  AssemblyStructure.findById(assemblyStructureId)
-    .then((assemblyStructure) => {
-      if (!assemblyStructure) {
-        const error = new Error("Could not find assembly structure.");
+  GraphicAssemblyPlan.findById(assemblyStructureId)
+    .then((graphicAssemblyPlan) => {
+      if (!graphicAssemblyPlan) {
+        const error = new Error("Could not find graphic assembly plan.");
         error.statusCode = 404;
         throw error;
       }
-      if (assemblyStructure.owner.toString() !== req.userId) {
+      if (graphicAssemblyPlan.owner.toString() !== req.userId) {
         const error = new Error("Not authorized!");
         error.statusCode = 403;
         throw error;
       }
 
-      assemblyStructure.teams = teams;
-      assemblyStructure.JM1 = JM1;
+      graphicAssemblyPlan.teams = teams;
+      graphicAssemblyPlan.projectId = projectId;
+      graphicAssemblyPlan.assemblyStructureId = assemblyStructureId;
 
-      return assemblyStructure.save();
+      return graphicAssemblyPlan.save();
     })
     .then((result) => {
-      res.status(200).json({ message: "Assembly structure updated!", assemblyStructure: result });
+      res.status(200).json({ message: "Graphic assembly structure updated!", graphicAssemblyPlan: result });
     })
     .catch((err) => {
       if (!err.statusCode) {
