@@ -165,9 +165,7 @@ exports.deleteAssemblyStructure = (req, res, next) => {
       return Project.findById(assemblyStructureGlobal.project);
     })
     .then((project) => {
-      console.log(project);
       project.assemblyStructure = undefined;
-      console.log(project.assemblyStructure);
       return project.save();
     })
     .then((result) => {

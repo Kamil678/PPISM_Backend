@@ -105,7 +105,7 @@ exports.updateGraphicAssemblyPlan = (req, res, next) => {
   const projectId = req.body.projectId;
   const assemblyStructureId = req.body.assemblyStructureId;
 
-  GraphicAssemblyPlan.findById(assemblyStructureId)
+  GraphicAssemblyPlan.findById(graphicAssemblyPlanId)
     .then((graphicAssemblyPlan) => {
       if (!graphicAssemblyPlan) {
         const error = new Error("Could not find graphic assembly plan.");
@@ -161,7 +161,7 @@ exports.deleteGraphicAssemblyPlan = (req, res, next) => {
       return user.save();
     })
     .then((result) => {
-      return Project.findById(graphicAssemblyPlanGlobal.project);
+      return Project.findById(graphicAssemblyPlanGlobal.projectId);
     })
     .then((project) => {
       project.graphicAssemblyPlan = undefined;
