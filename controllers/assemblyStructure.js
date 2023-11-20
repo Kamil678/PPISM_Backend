@@ -39,6 +39,7 @@ exports.createAssemblyStructure = (req, res, next) => {
   const projectId = req.body.project;
   let owner;
   let wholeProject;
+
   const assemblyStructure = new AssemblyStructure({
     teams: teams,
     JM1: JM1,

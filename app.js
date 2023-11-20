@@ -8,6 +8,7 @@ const morgan = require("morgan");
 
 const testRoutes = require("./routes/test");
 const projectRoutes = require("./routes/project");
+const productRoutes = require("./routes/product");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const assemblyStructureRoutes = require("./routes/assemblyStructure");
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api", testRoutes);
 app.use("/api", projectRoutes);
+app.use("/api", productRoutes);
 app.use("/api", userRoutes);
 app.use("/api", assemblyStructureRoutes);
 app.use("/api", graphicAssemblyPlanRoutes);

@@ -12,18 +12,15 @@ const projectSchema = new Schema(
       type: String,
       required: true,
     },
-    productName: {
-      type: String,
-      required: true,
-    },
-    parts: {
-      type: Array,
-      required: true,
-    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: false,
     },
     assemblyStructure: {
       type: Schema.Types.ObjectId,

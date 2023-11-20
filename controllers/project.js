@@ -7,22 +7,14 @@ const Project = require("../models/project");
 const User = require("../models/user");
 
 exports.getProjects = (req, res, next) => {
-  // const currentPage = req.query.page || 1;
-  // const perPage = 2;
-  // let totalItems;
   Project.find()
-    //.countDocuments()
     .then((projects) => {
-      // totalItems = count;
       return Project.find({ owner: req.userId });
-      // .skip((currentPage - 1) * perPage)
-      // .limit(perPage);
     })
     .then((projects) => {
       res.status(200).json({
         message: "Fetched projects successfully.",
         projects: projects,
-        // totalItems: totalItems,
       });
     })
     .catch((err) => {
@@ -40,25 +32,17 @@ exports.createProject = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  // if (!req.file) {
-  //   const error = new Error("No image provided.");
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
-  //const imageUrl = req.file.path;
+
   const title = req.body.title;
   const description = req.body.description;
-  const productName = req.body.productName;
-  const parts = req.body.parts;
   let owner;
+
   const project = new Project({
     title: title,
     description: description,
-    productName: productName,
-    parts: parts,
-    //imageUrl: imageUrl,
     owner: req.userId,
   });
+
   project
     .save()
     .then((result) => {
@@ -86,7 +70,9 @@ exports.createProject = (req, res, next) => {
 
 exports.getProject = (req, res, next) => {
   const projectId = req.params.projectId;
+
   Project.findById(projectId)
+    .populate("product")
     .then((project) => {
       if (!project) {
         const error = new Error("Could not find project.");
@@ -105,25 +91,17 @@ exports.getProject = (req, res, next) => {
 
 exports.updateProject = (req, res, next) => {
   const projectId = req.params.projectId;
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed, entered data is incorrect.");
     error.statusCode = 422;
     throw error;
   }
+
   const title = req.body.title;
   const description = req.body.description;
-  const productName = req.body.productName;
-  const parts = req.body.parts;
-  //let imageUrl = req.body.image;
-  // if (req.file) {
-  //   imageUrl = req.file.path;
-  // }
-  // if (!imageUrl) {
-  //   const error = new Error('No file picked.');
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
+
   Project.findById(projectId)
     .then((project) => {
       if (!project) {
@@ -136,14 +114,10 @@ exports.updateProject = (req, res, next) => {
         error.statusCode = 403;
         throw error;
       }
-      // if (imageUrl !== post.imageUrl) {
-      //   clearImage(post.imageUrl);
-      // }
+
       project.title = title;
-      //post.imageUrl = imageUrl;
       project.description = description;
-      project.productName = productName;
-      project.parts = parts;
+
       return project.save();
     })
     .then((result) => {
