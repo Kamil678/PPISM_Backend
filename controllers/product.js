@@ -130,7 +130,7 @@ exports.updateProduct = (req, res, next) => {
       product.parts = parts;
       product.project = project;
 
-      return project.save();
+      return product.save();
     })
     .then((result) => {
       res.status(200).json({ message: "Product updated!", product: result });
