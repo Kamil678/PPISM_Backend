@@ -13,6 +13,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const assemblyStructureRoutes = require("./routes/assemblyStructure");
 const graphicAssemblyPlanRoutes = require("./routes/graphicAssemblyPlan");
+const technologicalDocumentationsRoutes = require("./routes/technologicalDocumentations");
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.y79siij.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
@@ -37,6 +38,7 @@ app.use("/api", productRoutes);
 app.use("/api", userRoutes);
 app.use("/api", assemblyStructureRoutes);
 app.use("/api", graphicAssemblyPlanRoutes);
+app.use("/api", technologicalDocumentationsRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
