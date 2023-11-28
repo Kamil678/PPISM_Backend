@@ -8,6 +8,14 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    numberFromAssemblyDraw: {
+      type: Number,
+      required: true,
+    },
+    seriesSize: {
+      type: Number,
+      required: true,
+    },
     parts: {
       type: Array,
       required: true,
@@ -17,11 +25,11 @@ const productSchema = new Schema(
       ref: "Project",
       required: true,
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    // owner: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User",
+    //   required: true,
+    // },
   },
   {
     timestamps: {},

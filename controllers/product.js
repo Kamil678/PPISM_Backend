@@ -35,16 +35,18 @@ exports.createProduct = (req, res, next) => {
   }
 
   const name = req.body.name;
+  const numberFromAssemblyDraw = req.body.numberFromAssemblyDraw;
+  const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
   let wholeProject;
-  let owner;
 
   const product = new Product({
     name: name,
+    numberFromAssemblyDraw: numberFromAssemblyDraw,
+    seriesSize: seriesSize,
     parts: parts,
     project: project,
-    owner: req.userId,
   });
   product
     .save()
@@ -60,7 +62,6 @@ exports.createProduct = (req, res, next) => {
       return User.findById(req.userId);
     })
     .then((user) => {
-      owner = user;
       user.products.push(product);
       return user.save();
     })
@@ -68,7 +69,7 @@ exports.createProduct = (req, res, next) => {
       res.status(201).json({
         message: "Product created successfully!",
         project: project,
-        owner: { _id: owner._id, name: owner.name },
+        //owner: { _id: owner._id, name: owner.name },
       });
     })
     .catch((err) => {
@@ -110,6 +111,8 @@ exports.updateProduct = (req, res, next) => {
   }
 
   const name = req.body.name;
+  const numberFromAssemblyDraw = req.body.numberFromAssemblyDraw;
+  const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
 
@@ -120,13 +123,10 @@ exports.updateProduct = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (product.owner.toString() !== req.userId) {
-        const error = new Error("Not authorized!");
-        error.statusCode = 403;
-        throw error;
-      }
 
       product.name = name;
+      product.numberFromAssemblyDraw = numberFromAssemblyDraw;
+      product.seriesSize = seriesSize;
       product.parts = parts;
       product.project = project;
 
@@ -154,11 +154,7 @@ exports.deleteProduct = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (product.owner.toString() !== req.userId) {
-        const error = new Error("Not authorized!");
-        error.statusCode = 403;
-        throw error;
-      }
+
       productGlobal = product;
       return Product.findByIdAndRemove(productId);
     })

@@ -48,6 +48,12 @@ const userSchema = new Schema(
         ref: "GraphicAssemblyPlan",
       },
     ],
+    technologicalDocumentations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "TechnologicalDocumentations",
+      },
+    ],
   },
   {
     timestamps: {},

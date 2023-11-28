@@ -2,22 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
 
-const { validationResult } = require("express-validator");
-
 const Project = require("../models/project");
 const User = require("../models/user");
 const AssemblyStructure = require("../models/assemblyStructure");
-const project = require("../models/project");
-const assemblyStructure = require("../models/assemblyStructure");
 
 exports.getAssemblyStructures = (req, res, next) => {
   AssemblyStructure.find()
-    //.countDocuments()
     .then((assemblyStructure) => {
-      // totalItems = count;
       return AssemblyStructure.find({ owner: req.userId });
-      // .skip((currentPage - 1) * perPage)
-      // .limit(perPage);
     })
     .then((assemblyStructures) => {
       res.status(200).json({
@@ -34,17 +26,15 @@ exports.getAssemblyStructures = (req, res, next) => {
 };
 
 exports.createAssemblyStructure = (req, res, next) => {
-  const teams = req.body.teams;
+  const assemblyUnits = req.body.assemblyUnits;
   const JM1 = req.body.JM1;
   const projectId = req.body.project;
-  let owner;
   let wholeProject;
 
   const assemblyStructure = new AssemblyStructure({
-    teams: teams,
+    assemblyUnits: assemblyUnits,
     JM1: JM1,
     project: projectId,
-    owner: req.userId,
   });
   assemblyStructure
     .save()
@@ -63,7 +53,6 @@ exports.createAssemblyStructure = (req, res, next) => {
       return User.findById(req.userId);
     })
     .then((user) => {
-      owner = user;
       user.assemblyStructures.push(assemblyStructure);
       return user.save();
     })
@@ -104,7 +93,7 @@ exports.getAssemblyStructure = (req, res, next) => {
 exports.updateAssemblyStructure = (req, res, next) => {
   const assemblyStructureId = req.params.assemblyStructureId;
 
-  const teams = req.body.teams;
+  const assemblyUnits = req.body.assemblyUnits;
   const JM1 = req.body.JM1;
 
   AssemblyStructure.findById(assemblyStructureId)
@@ -114,14 +103,8 @@ exports.updateAssemblyStructure = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (assemblyStructure.owner.toString() !== req.userId) {
-        const error = new Error("Not authorized!");
-        error.statusCode = 403;
-        throw error;
-      }
 
-      console.log(assemblyStructure);
-      assemblyStructure.teams = teams;
+      assemblyStructure.assemblyUnits = assemblyUnits;
       assemblyStructure.JM1 = JM1;
 
       return assemblyStructure.save();
@@ -147,11 +130,7 @@ exports.deleteAssemblyStructure = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (assemblyStructure.owner.toString() !== req.userId) {
-        const error = new Error("Not authorized!");
-        error.statusCode = 403;
-        throw error;
-      }
+
       assemblyStructureGlobal = assemblyStructure;
       return AssemblyStructure.findByIdAndRemove(assemblyStructureId);
     })

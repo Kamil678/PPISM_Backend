@@ -4,23 +4,13 @@ const Schema = mongoose.Schema;
 
 const graphicAssemblyPlanSchema = new Schema(
   {
-    teams: {
+    assemblyUnits: {
       type: Array,
       required: true,
     },
     projectId: {
       type: Schema.Types.ObjectId,
       ref: "Project",
-      required: true,
-    },
-    assemblyStructureId: {
-      type: Schema.Types.ObjectId,
-      ref: "AssemblyStructure",
-      required: true,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
       required: true,
     },
   },

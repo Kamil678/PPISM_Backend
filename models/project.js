@@ -32,6 +32,11 @@ const projectSchema = new Schema(
       ref: "GraphicAssemblyPlan",
       required: false,
     },
+    technologicalDocumentations: {
+      type: Schema.Types.ObjectId,
+      ref: "TechnologicalDocumentations",
+      required: false,
+    },
     status: {
       type: Object,
       default: { id: 1, name: "NEW" },

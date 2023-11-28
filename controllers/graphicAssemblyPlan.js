@@ -9,41 +9,14 @@ const User = require("../models/user");
 const AssemblyStructure = require("../models/assemblyStructure");
 const GraphicAssemblyPlan = require("../models/graphicAssemblyPlan");
 
-// exports.getAssemblyStructures = (req, res, next) => {
-//   AssemblyStructure.find()
-//     //.countDocuments()
-//     .then((assemblyStructure) => {
-//       // totalItems = count;
-//       return AssemblyStructure.find({ owner: req.userId });
-//       // .skip((currentPage - 1) * perPage)
-//       // .limit(perPage);
-//     })
-//     .then((assemblyStructures) => {
-//       res.status(200).json({
-//         message: "Fetched projects successfully.",
-//         assemblyStructures: assemblyStructures,
-//       });
-//     })
-//     .catch((err) => {
-//       if (!err.statusCode) {
-//         err.statusCode = 500;
-//       }
-//       next(err);
-//     });
-// };
-
 exports.createGraphicAssemblyPlan = (req, res, next) => {
-  const teams = req.body.teams;
+  const assemblyUnits = req.body.assemblyUnits;
   const projectId = req.body.projectId;
-  const assemblyStructureId = req.body.assemblyStructureId;
-  let owner;
   let wholeProject;
 
   const graphicAssemblyPlan = new GraphicAssemblyPlan({
-    teams: teams,
+    assemblyUnits: assemblyUnits,
     projectId: projectId,
-    assemblyStructureId: assemblyStructureId,
-    owner: req.userId,
   });
 
   graphicAssemblyPlan
@@ -101,9 +74,8 @@ exports.getGraphicAssemblyPlan = (req, res, next) => {
 exports.updateGraphicAssemblyPlan = (req, res, next) => {
   const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
 
-  const teams = req.body.teams;
+  const assemblyUnits = req.body.assemblyUnits;
   const projectId = req.body.projectId;
-  const assemblyStructureId = req.body.assemblyStructureId;
 
   GraphicAssemblyPlan.findById(graphicAssemblyPlanId)
     .then((graphicAssemblyPlan) => {
@@ -112,15 +84,9 @@ exports.updateGraphicAssemblyPlan = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (graphicAssemblyPlan.owner.toString() !== req.userId) {
-        const error = new Error("Not authorized!");
-        error.statusCode = 403;
-        throw error;
-      }
 
-      graphicAssemblyPlan.teams = teams;
+      graphicAssemblyPlan.assemblyUnits = assemblyUnits;
       graphicAssemblyPlan.projectId = projectId;
-      graphicAssemblyPlan.assemblyStructureId = assemblyStructureId;
 
       return graphicAssemblyPlan.save();
     })
@@ -145,11 +111,7 @@ exports.deleteGraphicAssemblyPlan = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (graphicAssemblyPlan.owner.toString() !== req.userId) {
-        const error = new Error("Not authorized!");
-        error.statusCode = 403;
-        throw error;
-      }
+
       graphicAssemblyPlanGlobal = graphicAssemblyPlan;
       return GraphicAssemblyPlan.findByIdAndRemove(graphicAssemblyPlanId);
     })

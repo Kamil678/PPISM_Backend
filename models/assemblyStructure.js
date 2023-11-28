@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const assemblyStructureSchema = new Schema(
   {
-    teams: {
+    assemblyUnits: {
       type: Array,
       required: true,
     },
@@ -15,11 +15,6 @@ const assemblyStructureSchema = new Schema(
     project: {
       type: Schema.Types.ObjectId,
       ref: "Project",
-      required: true,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
       required: true,
     },
   },
