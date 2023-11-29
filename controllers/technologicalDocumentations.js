@@ -13,7 +13,7 @@ exports.createTechnologicalDocuemntations = (req, res, next) => {
 
   const technologicalDocumentations = new TechnologicalDocumentations({
     operations: operations,
-    project: projectId,
+    project: project,
   });
   technologicalDocumentations
     .save()
@@ -26,7 +26,7 @@ exports.createTechnologicalDocuemntations = (req, res, next) => {
       return project.save();
     })
     .then((result) => {
-      return Project.findById(projectId);
+      return Project.findById(project);
     })
     .then((result) => {
       return User.findById(req.userId);

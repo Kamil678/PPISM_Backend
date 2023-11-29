@@ -3,7 +3,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const actionSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
   generalOperationNumber: {
+    type: Number,
+    required: false,
+  },
+  action: {
     type: Number,
     required: true,
   },
@@ -17,11 +25,11 @@ const actionSchema = new Schema({
   },
   assemblyTool: {
     type: String,
-    required: true,
+    required: false,
   },
   parameters: {
     type: String,
-    required: true,
+    required: false,
   },
   tg: {
     type: Number,
@@ -91,7 +99,7 @@ const operationSchema = new Schema({
   },
   procedures: {
     type: [procedureSchema],
-    required: true,
+    required: false,
   },
 });
 
