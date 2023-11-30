@@ -101,6 +101,14 @@ const operationSchema = new Schema({
     type: [procedureSchema],
     required: false,
   },
+  allActions: {
+    type: Array,
+    required: false,
+  },
+  assemblySequenceGraph: {
+    type: Array,
+    required: false,
+  },
 });
 
 const technologicalDocumentationsSchema = new Schema(
