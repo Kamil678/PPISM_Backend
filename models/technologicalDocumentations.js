@@ -109,6 +109,10 @@ const operationSchema = new Schema({
     type: Array,
     required: false,
   },
+  textToSequenceGraph: {
+    type: String,
+    required: false,
+  },
 });
 
 const technologicalDocumentationsSchema = new Schema(
