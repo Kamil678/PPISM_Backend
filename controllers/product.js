@@ -39,6 +39,21 @@ exports.createProduct = (req, res, next) => {
   const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
+  const yearlyProductionProgram = req.body.yearlyProductionProgram;
+  const DpT = req.body.DpT;
+  const IZ = req.body.IZ;
+  const TnZ = req.body.TnZ;
+  const TnP = req.body.TnP;
+  const DpR = req.body.DpR;
+  const Fd = req.body.Fd;
+  const Fe = req.body.Fe;
+  const p = req.body.p;
+  const TTh = req.body.TTh;
+  const TTm = req.body.TTm;
+  const TTs = req.body.TTs;
+  const Pdz = req.body.Pdz;
+  const Pzm = req.body.Pzm;
+
   let wholeProject;
 
   const product = new Product({
@@ -47,6 +62,20 @@ exports.createProduct = (req, res, next) => {
     seriesSize: seriesSize,
     parts: parts,
     project: project,
+    yearlyProductionProgram: yearlyProductionProgram,
+    DpT: DpT,
+    IZ: IZ,
+    TnZ: TnZ,
+    TnP: TnP,
+    DpR: DpR,
+    Fd: Fd,
+    Fe: Fe,
+    p: p,
+    TTh: TTh,
+    TTm: TTm,
+    TTs: TTs,
+    Pdz: Pdz,
+    Pzm: Pzm,
   });
   product
     .save()
@@ -69,7 +98,6 @@ exports.createProduct = (req, res, next) => {
       res.status(201).json({
         message: "Product created successfully!",
         project: project,
-        //owner: { _id: owner._id, name: owner.name },
       });
     })
     .catch((err) => {
@@ -115,6 +143,20 @@ exports.updateProduct = (req, res, next) => {
   const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
+  const yearlyProductionProgram = req.body.yearlyProductionProgram;
+  const DpT = req.body.DpT;
+  const IZ = req.body.IZ;
+  const TnZ = req.body.TnZ;
+  const TnP = req.body.TnP;
+  const DpR = req.body.DpR;
+  const Fd = req.body.Fd;
+  const Fe = req.body.Fe;
+  const p = req.body.p;
+  const TTh = req.body.TTh;
+  const TTm = req.body.TTm;
+  const TTs = req.body.TTs;
+  const Pdz = req.body.Pdz;
+  const Pzm = req.body.Pzm;
 
   Product.findById(productId)
     .then((product) => {
@@ -129,6 +171,20 @@ exports.updateProduct = (req, res, next) => {
       product.seriesSize = seriesSize;
       product.parts = parts;
       product.project = project;
+      product.yearlyProductionProgram = yearlyProductionProgram;
+      product.DpT = DpT;
+      product.IZ = IZ;
+      product.TnZ = TnZ;
+      product.TnP = TnP;
+      product.DpR = DpR;
+      product.Fd = Fd;
+      product.Fe = Fe;
+      product.p = p;
+      product.TTh = TTh;
+      product.TTm = TTm;
+      product.TTs = TTs;
+      product.Pdz = Pdz;
+      product.Pzm = Pzm;
 
       return product.save();
     })
