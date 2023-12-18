@@ -34,8 +34,15 @@ exports.createProduct = (req, res, next) => {
     throw error;
   }
 
+  if (!req.file) {
+    const error = new Error("No image provided.");
+    error.statusCode = 422;
+    throw error;
+  }
+
   const name = req.body.name;
   const numberFromAssemblyDraw = req.body.numberFromAssemblyDraw;
+  const imageProduct = req.file.path;
   const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
@@ -59,6 +66,7 @@ exports.createProduct = (req, res, next) => {
   const product = new Product({
     name: name,
     numberFromAssemblyDraw: numberFromAssemblyDraw,
+    imageProduct: imageProduct,
     seriesSize: seriesSize,
     parts: parts,
     project: project,
@@ -140,6 +148,8 @@ exports.updateProduct = (req, res, next) => {
 
   const name = req.body.name;
   const numberFromAssemblyDraw = req.body.numberFromAssemblyDraw;
+  console.log(req.image);
+  const imageProduct = req.file.path;
   const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
@@ -168,6 +178,7 @@ exports.updateProduct = (req, res, next) => {
 
       product.name = name;
       product.numberFromAssemblyDraw = numberFromAssemblyDraw;
+      product.imageProduct = imageProduct;
       product.seriesSize = seriesSize;
       product.parts = parts;
       product.project = project;
@@ -237,4 +248,17 @@ exports.deleteProduct = (req, res, next) => {
       }
       next(err);
     });
+};
+
+exports.uploadImage = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed, entered data is incorrect.");
+    error.statusCode = 422;
+    throw error;
+  }
+
+  const imageProduct = req.file.path;
+  console.log(`${req.protocol}://${req.get("host")}`);
+  return res.status(200).json({ message: "Image added!", imageProduct: imageProduct });
 };
