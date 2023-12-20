@@ -7,7 +7,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const multer = require("multer");
 
-const testRoutes = require("./routes/test");
+//Import routes
 const projectRoutes = require("./routes/project");
 const productRoutes = require("./routes/product");
 const authRoutes = require("./routes/auth");
@@ -38,27 +38,23 @@ const fileFilter = (req, file, cb) => {
 };
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), { flags: "a" });
-app.use(
-  helmet({
-    crossOriginEmbedderPolicy: false,
-    // ...
-  })
-);
 app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(bodyParser.json());
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("imageProduct"));
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "/images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-inline");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With,Content-Type, Authorization, Accept");
+  res.header("Access-Control-Allow-Credentials", true);
+
   next();
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api", testRoutes);
 app.use("/api", projectRoutes);
 app.use("/api", productRoutes);
 app.use("/api", userRoutes);

@@ -1,7 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-const mongoose = require("mongoose");
-
 const Project = require("../models/project");
 const User = require("../models/user");
 const TechnologicalDocumentations = require("../models/technologicalDocumentations");
@@ -15,6 +11,7 @@ exports.createTechnologicalDocuemntations = (req, res, next) => {
     operations: operations,
     project: project,
   });
+
   technologicalDocumentations
     .save()
     .then((result) => {
@@ -52,6 +49,7 @@ exports.createTechnologicalDocuemntations = (req, res, next) => {
 
 exports.getTechnologicalDocumentations = (req, res, next) => {
   const technologicalDocumentationsId = req.params.technologicalDocumentationsId;
+
   TechnologicalDocumentations.findById(technologicalDocumentationsId)
     .then((technologicalDocumentations) => {
       if (!technologicalDocumentations) {
@@ -71,7 +69,6 @@ exports.getTechnologicalDocumentations = (req, res, next) => {
 
 exports.updateTechnologicalDocumentations = (req, res, next) => {
   const technologicalDocumentationsId = req.params.technologicalDocumentationsId;
-
   const operations = req.body.operations;
 
   TechnologicalDocumentations.findById(technologicalDocumentationsId)
@@ -100,6 +97,7 @@ exports.updateTechnologicalDocumentations = (req, res, next) => {
 exports.deleteTechnologicalDocumentations = (req, res, next) => {
   const technologicalDocumentationsId = req.params.technologicalDocumentationsId;
   let technologicalDocumentationsGlobal;
+
   TechnologicalDocumentations.findById(technologicalDocumentationsId)
     .then((technologicalDocumentations) => {
       if (!technologicalDocumentations) {
@@ -109,6 +107,7 @@ exports.deleteTechnologicalDocumentations = (req, res, next) => {
       }
 
       technologicalDocumentationsGlobal = technologicalDocumentations;
+
       return TechnologicalDocumentations.findByIdAndRemove(technologicalDocumentationsId);
     })
     .then((result) => {

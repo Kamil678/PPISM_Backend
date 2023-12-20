@@ -15,6 +15,4 @@ router.put("/product/:productId", isAuth, [body("name").notEmpty(), body("parts"
 
 router.delete("/product/:productId", isAuth, productController.deleteProduct);
 
-router.post("/upload-image", isAuth, productController.uploadImage);
-
 module.exports = router;

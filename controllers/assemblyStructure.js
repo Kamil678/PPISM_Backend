@@ -1,7 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-const mongoose = require("mongoose");
-
 const Project = require("../models/project");
 const User = require("../models/user");
 const AssemblyStructure = require("../models/assemblyStructure");
@@ -13,7 +9,7 @@ exports.getAssemblyStructures = (req, res, next) => {
     })
     .then((assemblyStructures) => {
       res.status(200).json({
-        message: "Fetched projects successfully.",
+        message: "Fetched assembly structure successfully.",
         assemblyStructures: assemblyStructures,
       });
     })
@@ -58,7 +54,7 @@ exports.createAssemblyStructure = (req, res, next) => {
     })
     .then((result) => {
       res.status(201).json({
-        message: "Project created successfully!",
+        message: "Assembly structure created successfully!",
         assemblyStructure: assemblyStructure,
         project: wholeProject,
       });
@@ -92,7 +88,6 @@ exports.getAssemblyStructure = (req, res, next) => {
 
 exports.updateAssemblyStructure = (req, res, next) => {
   const assemblyStructureId = req.params.assemblyStructureId;
-
   const assemblyUnits = req.body.assemblyUnits;
   const JM1 = req.body.JM1;
 
@@ -123,6 +118,7 @@ exports.updateAssemblyStructure = (req, res, next) => {
 exports.deleteAssemblyStructure = (req, res, next) => {
   const assemblyStructureId = req.params.assemblyStructureId;
   let assemblyStructureGlobal;
+
   AssemblyStructure.findById(assemblyStructureId)
     .then((assemblyStructure) => {
       if (!assemblyStructure) {

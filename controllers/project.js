@@ -1,8 +1,4 @@
-const fs = require("fs");
-const path = require("path");
-
 const { validationResult } = require("express-validator");
-
 const Project = require("../models/project");
 const User = require("../models/user");
 
@@ -27,6 +23,7 @@ exports.getProjects = (req, res, next) => {
 
 exports.createProject = (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed, entered data is incorrect.");
     error.statusCode = 422;
@@ -164,6 +161,7 @@ exports.updateProjectStatus = (req, res, next) => {
 
 exports.deleteProject = (req, res, next) => {
   const projectId = req.params.projectId;
+
   Project.findById(projectId)
     .then((project) => {
       if (!project) {
@@ -177,8 +175,7 @@ exports.deleteProject = (req, res, next) => {
         error.statusCode = 403;
         throw error;
       }
-      // Check logged in user
-      // clearImage(post.imageUrl);
+
       return Project.findByIdAndRemove(projectId);
     })
     .then((result) => {

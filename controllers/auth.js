@@ -6,17 +6,20 @@ const User = require("../models/user");
 
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const error = new Error("Validation error.");
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
   }
+
   const name = req.body.name;
   const surname = req.body.surname;
   const role = req.body.role;
   const email = req.body.email;
   const password = req.body.password;
+
   bcrypt
     .hash(password, 12)
     .then((hashedPw) => {
@@ -44,10 +47,11 @@ exports.login = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   let loadedUser;
+
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        const error = new Error("Użytkownik z tym emailem nie istnieje");
+        const error = new Error("User with this email does not exist");
         error.statusCode = 401;
         throw error;
       }
@@ -56,10 +60,11 @@ exports.login = (req, res, next) => {
     })
     .then((isEqual) => {
       if (!isEqual) {
-        const error = new Error("Wpisano złe hasło");
+        const error = new Error("Wrong password entered");
         error.statusCode = 401;
         throw error;
       }
+
       const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString() }, "somesupersecretsecret", { expiresIn: "1h" });
       const userToSend = loadedUser;
       userToSend.password = undefined;
@@ -68,7 +73,7 @@ exports.login = (req, res, next) => {
     })
     .catch((err) => {
       if (!err.statusCode) {
-        const error = new Error("Błąd podczas logowania");
+        const error = new Error("Error login");
         error.statusCode = 500;
         throw error;
       }

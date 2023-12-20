@@ -1,6 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
 const { validationResult } = require("express-validator");
 
 const Project = require("../models/project");
@@ -28,21 +25,16 @@ exports.getProducts = (req, res, next) => {
 
 exports.createProduct = (req, res, next) => {
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed, entered data is incorrect.");
     error.statusCode = 422;
     throw error;
   }
 
-  if (!req.file) {
-    const error = new Error("No image provided.");
-    error.statusCode = 422;
-    throw error;
-  }
-
   const name = req.body.name;
   const numberFromAssemblyDraw = req.body.numberFromAssemblyDraw;
-  const imageProduct = req.file.path;
+  const imageProduct = req.body.imageProduct;
   const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
@@ -60,8 +52,6 @@ exports.createProduct = (req, res, next) => {
   const TTs = req.body.TTs;
   const Pdz = req.body.Pdz;
   const Pzm = req.body.Pzm;
-
-  let wholeProject;
 
   const product = new Product({
     name: name,
@@ -85,6 +75,7 @@ exports.createProduct = (req, res, next) => {
     Pdz: Pdz,
     Pzm: Pzm,
   });
+
   product
     .save()
     .then((result) => {
@@ -148,8 +139,7 @@ exports.updateProduct = (req, res, next) => {
 
   const name = req.body.name;
   const numberFromAssemblyDraw = req.body.numberFromAssemblyDraw;
-  console.log(req.image);
-  const imageProduct = req.file.path;
+  const imageProduct = req.body.imageProduct;
   const seriesSize = req.body.seriesSize;
   const parts = req.body.parts;
   const project = req.body.projectId;
@@ -248,17 +238,4 @@ exports.deleteProduct = (req, res, next) => {
       }
       next(err);
     });
-};
-
-exports.uploadImage = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error("Validation failed, entered data is incorrect.");
-    error.statusCode = 422;
-    throw error;
-  }
-
-  const imageProduct = req.file.path;
-  console.log(`${req.protocol}://${req.get("host")}`);
-  return res.status(200).json({ message: "Image added!", imageProduct: imageProduct });
 };

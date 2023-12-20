@@ -1,6 +1,5 @@
 const express = require("express");
 const assemblyStructureController = require("../controllers/assemblyStructure");
-const { body } = require("express-validator");
 const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();

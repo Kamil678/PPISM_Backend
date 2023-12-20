@@ -1,12 +1,5 @@
-const fs = require("fs");
-const path = require("path");
-const mongoose = require("mongoose");
-
-const { validationResult } = require("express-validator");
-
 const Project = require("../models/project");
 const User = require("../models/user");
-const AssemblyStructure = require("../models/assemblyStructure");
 const GraphicAssemblyPlan = require("../models/graphicAssemblyPlan");
 
 exports.createGraphicAssemblyPlan = (req, res, next) => {
@@ -54,6 +47,7 @@ exports.createGraphicAssemblyPlan = (req, res, next) => {
 
 exports.getGraphicAssemblyPlan = (req, res, next) => {
   const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
+
   GraphicAssemblyPlan.findById(graphicAssemblyPlanId)
     .then((graphicAssemblyPlan) => {
       if (!graphicAssemblyPlan) {
@@ -73,7 +67,6 @@ exports.getGraphicAssemblyPlan = (req, res, next) => {
 
 exports.updateGraphicAssemblyPlan = (req, res, next) => {
   const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
-
   const assemblyUnits = req.body.assemblyUnits;
   const projectId = req.body.projectId;
 
@@ -104,6 +97,7 @@ exports.updateGraphicAssemblyPlan = (req, res, next) => {
 exports.deleteGraphicAssemblyPlan = (req, res, next) => {
   const graphicAssemblyPlanId = req.params.graphicAssemblyPlanId;
   let graphicAssemblyPlanGlobal;
+
   GraphicAssemblyPlan.findById(graphicAssemblyPlanId)
     .then((graphicAssemblyPlan) => {
       if (!graphicAssemblyPlan) {
@@ -113,6 +107,7 @@ exports.deleteGraphicAssemblyPlan = (req, res, next) => {
       }
 
       graphicAssemblyPlanGlobal = graphicAssemblyPlan;
+
       return GraphicAssemblyPlan.findByIdAndRemove(graphicAssemblyPlanId);
     })
     .then((result) => {
