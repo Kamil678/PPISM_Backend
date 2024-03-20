@@ -73,7 +73,7 @@ exports.login = (req, res, next) => {
     })
     .catch((err) => {
       if (!err.statusCode) {
-        const error = new Error("Error login");
+        const error = new Error("Error login!");
         error.statusCode = 500;
         throw error;
       }
